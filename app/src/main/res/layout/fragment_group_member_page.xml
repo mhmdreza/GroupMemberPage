@@ -17,6 +17,9 @@
         android:background="@color/toolbar"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+        <include layout="@layout/group_member_page_info"/>
+
     </android.support.v7.widget.Toolbar>
 
     <include layout="@layout/add_member_layout"/>

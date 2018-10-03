@@ -7,13 +7,14 @@
     android:orientation="vertical">
 
     <View
+        android:id="@+id/group_member_info_background"
         android:layout_width="match_parent"
         android:layout_height="32dp"
         android:layout_alignParentTop="true"
         android:background="@color/group_member_number_background" />
 
     <TextView
-        android:id="@+id/text_view_group_member_number"
+        android:id="@+id/text_view_group_member_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
@@ -33,7 +34,7 @@
         android:id="@+id/recycler_view_group_member"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/text_view_group_member_number"
+        android:layout_below="@id/group_member_info_background"
         android:orientation="vertical"
         app:layoutManager="android.support.v7.widget.GridLayoutManager" />
 

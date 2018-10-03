@@ -13,8 +13,12 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.mhmdreza_j.groupmemberpage.group_member.GroupMemberAdapter;
 import com.example.mhmdreza_j.groupmemberpage.group_member.GroupMemberViewModel;
 
@@ -37,7 +41,20 @@ public class GroupMemberPageFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_group_member_page, container, false);
         initializeGroupMember(view);
+        setGroupInfo(view);
         return view;
+    }
+
+    private void setGroupInfo(View view) {
+        ImageView groupImageView = view.findViewById(R.id.image_view_group_image);
+        TextView groupNameTextView = view.findViewById(R.id.text_view_group_name);
+        TextView groupMemberNumberTextView = view.findViewById(R.id.text_view_group_member_number);
+        groupNameTextView.setText("نام گروه");
+        groupMemberNumberTextView.setText("تعداد اعضای گروه");
+        Glide.with(view)
+                .load("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9S1cddQSI1jovslj7jvSg6EFjOsn0d8O6QHsMOxKr3iOHPrrV")
+                .apply(new RequestOptions().circleCrop())
+                .into(groupImageView);
     }
 
     private void initializeGroupMember(View view) {
@@ -79,13 +96,13 @@ public class GroupMemberPageFragment extends Fragment {
         mediaArrayList.add(new MediaViewModel("https://dqgroc0ic5iei.cloudfront.net/images/GoestaReiland_DSC01125-CMSTemplate.2e16d0ba.fill-400x400_6Wso0qQ.jpg"));
         groupMemberList.add(new GroupMemberViewModel("ali", "online", mediaArrayList.get(0), true));
         groupMemberList.add(new GroupMemberViewModel("ali zdmdgfxcv", "7 minutes ago", mediaArrayList.get(1), false));
-//        groupMemberList.add(new GroupMemberViewModel("ali sdt", "today 17:45", mediaArrayList.get(2), false));
-//        groupMemberList.add(new GroupMemberViewModel("alixvfb f ", "yesterday 12:33", mediaArrayList.get(3), true));
-//        groupMemberList.add(new GroupMemberViewModel("ali zvdglrxclv", "2018/11/11 11:11", mediaArrayList.get(4), false));
-//        groupMemberList.add(new GroupMemberViewModel("ali xvc fbdb", "online", mediaArrayList.get(5), false));
-//        groupMemberList.add(new GroupMemberViewModel("ali rogl; fobk;fldb, f", "10 minasdfg", mediaArrayList.get(6), false));
-//        groupMemberList.add(new GroupMemberViewModel("ali dzsgr dfg;l, ldf", "online", mediaArrayList.get(7), true));
-//        groupMemberList.add(new GroupMemberViewModel("ali dfmgdf l;bfd", "online", mediaArrayList.get(8), false));
+        groupMemberList.add(new GroupMemberViewModel("ali sdt", "today 17:45", mediaArrayList.get(2), false));
+        groupMemberList.add(new GroupMemberViewModel("alixvfb f ", "yesterday 12:33", mediaArrayList.get(3), true));
+        groupMemberList.add(new GroupMemberViewModel("ali zvdglrxclv", "2018/11/11 11:11", mediaArrayList.get(4), false));
+        groupMemberList.add(new GroupMemberViewModel("ali xvc fbdb", "online", mediaArrayList.get(5), false));
+        groupMemberList.add(new GroupMemberViewModel("ali rogl; fobk;fldb, f", "10 minasdfg", mediaArrayList.get(6), false));
+        groupMemberList.add(new GroupMemberViewModel("ali dzsgr dfg;l, ldf", "online", mediaArrayList.get(7), true));
+        groupMemberList.add(new GroupMemberViewModel("ali dfmgdf l;bfd", "online", mediaArrayList.get(8), false));
         return groupMemberList;
     }
 
