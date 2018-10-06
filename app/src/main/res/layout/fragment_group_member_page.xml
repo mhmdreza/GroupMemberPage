@@ -22,10 +22,22 @@
 
     </android.support.v7.widget.Toolbar>
 
-    <include layout="@layout/add_member_layout"/>
+    <!--<include layout="@layout/add_member_layout"/>-->
 
-    <include layout="@layout/create_link_layout"/>
+    <!--<include layout="@layout/create_link_layout"/>-->
 
-    <include layout="@layout/group_member_vertical_layout" />
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view_group_option"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layoutManager="android.support.v7.widget.GridLayoutManager" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view_group_member"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layoutManager="android.support.v7.widget.GridLayoutManager" />
 
 </LinearLayout>

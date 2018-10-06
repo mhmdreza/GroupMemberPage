@@ -15,10 +15,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.mhmdreza_j.groupmemberpage.group_info.GroupOptionAdapter;
+import com.example.mhmdreza_j.groupmemberpage.group_info.GroupOptionViewModel;
 import com.example.mhmdreza_j.groupmemberpage.group_member.GroupMemberAdapter;
 import com.example.mhmdreza_j.groupmemberpage.group_member.GroupMemberViewModel;
 
@@ -60,8 +61,23 @@ public class GroupMemberPageFragment extends Fragment {
     private void initializeGroupMember(View view) {
         RecyclerView groupMemberRecyclerView = view.findViewById(R.id.recycler_view_group_member);
         ArrayList<GroupMemberViewModel> groupMemberList = getGroupMemberList();
-        GroupMemberAdapter adapter = new GroupMemberAdapter(groupMemberList);
-        groupMemberRecyclerView.setAdapter(adapter);
+        GroupMemberAdapter memberAdapter = new GroupMemberAdapter(groupMemberList);
+        groupMemberRecyclerView.setAdapter(memberAdapter);
+
+        RecyclerView groupInfoRecyclerView = view.findViewById(R.id.recycler_view_group_option);
+        ArrayList<GroupOptionViewModel> groupOptionViewModels = new ArrayList<>();
+//        groupOptionViewModels.add(new GroupOptionViewModel(getString(R.string.create_link), R.drawable.ic_create_link));
+        groupOptionViewModels.add(new GroupOptionViewModel(GroupOptionViewModel.OPTION_TYPE
+                , getString(R.string.add_member)
+                , R.drawable.ic_add_member));
+        groupOptionViewModels.add(new GroupOptionViewModel(GroupOptionViewModel.OPTION_TYPE
+                , getString(R.string.create_link)
+                , R.drawable.ic_create_link));
+        groupOptionViewModels.add(new GroupOptionViewModel(GroupOptionViewModel.TITLE_TYPE
+                , "تعداد اعضا"
+                , 0));
+        GroupOptionAdapter optionAdapter = new GroupOptionAdapter(groupOptionViewModels);
+        groupInfoRecyclerView.setAdapter(optionAdapter);
     }
 
 
