@@ -5,4 +5,7 @@
     <color name="colorAccent">#FF4081</color>
     <color name="group_member_number_background">#FFD8D8D8</color>
     <color name="toolbar">#FF6BA2CE</color>
+    <color name="text_blue">#FF3193FD</color>
+    <color name="white">#ffffffff</color>
+    <color name="horizontal_line">#FFDFDFDF</color>
 </resources>

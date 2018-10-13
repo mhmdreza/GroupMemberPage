@@ -1,34 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-
-    <ImageView
-        android:id="@+id/image_view_option"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginBottom="11dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="13dp"
-        android:contentDescription="image_view_option"
-        tools:ignore="HardcodedText" />
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <TextView
-        android:id="@+id/text_view_option"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginBottom="10dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginRight="32dp"
-        android:layout_marginTop="16dp"
-        android:layout_toLeftOf="@id/image_view_option"
-        android:layout_toStartOf="@id/image_view_option"
-        android:textSize="13sp" />
+        android:id="@+id/text_view_add_member"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:drawableLeft="@drawable/ic_add_member"
+        android:drawablePadding="32dp"
+        android:drawableStart="@drawable/ic_add_member"
+        android:focusable="true"
+        android:gravity="start"
+        android:maxHeight="56dp"
+        android:paddingBottom="17dp"
+        android:paddingLeft="16dp"
+        android:paddingStart="16dp"
+        android:paddingTop="17dp"
+        android:text="@string/add_member"
+        android:textAlignment="viewStart"
+        android:textSize="13sp"
+        tools:ignore="RelativeOverlap,RtlSymmetry" />
 
-</RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
+        android:background="@color/horizontal_line"/>
+
+    <TextView
+        android:id="@+id/text_view_create_link"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:drawableLeft="@drawable/ic_create_link"
+        android:drawablePadding="32dp"
+        android:drawableStart="@drawable/ic_create_link"
+        android:focusable="true"
+        android:gravity="start"
+        android:maxHeight="56dp"
+        android:paddingBottom="17dp"
+        android:paddingLeft="16dp"
+        android:paddingStart="16dp"
+        android:paddingTop="17dp"
+        android:text="@string/create_link"
+        android:textAlignment="viewStart"
+        android:textSize="13sp"
+        tools:ignore="RelativeOverlap,RtlSymmetry" />
+
+</LinearLayout>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/text_view_group_member_counter"
+    android:layout_width="match_parent"
+    android:layout_height="28dp"
+    android:layout_alignParentTop="true"
+    android:layout_centerVertical="true"
+    android:gravity="center_vertical"
+    android:paddingEnd="17dp"
+    android:paddingRight="17dp"
+    android:background="@color/toolbar"
+    android:text="@string/group_member_number"
+    android:textColor="@android:color/white"
+    android:textSize="12sp"
+    tools:ignore="RelativeOverlap,RtlSymmetry" />
