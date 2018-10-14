@@ -1,6 +1,7 @@
 package com.example.mhmdreza_j.groupmemberpage;
 
 
+import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.os.Bundle;
@@ -24,7 +25,6 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.mhmdreza_j.groupmemberpage.group_member.GroupMemberAdapter;
-import com.example.mhmdreza_j.groupmemberpage.group_member.GroupMemberDatabase;
 import com.example.mhmdreza_j.groupmemberpage.group_member.GroupMemberRepository;
 import com.example.mhmdreza_j.groupmemberpage.group_member.GroupMemberViewModel;
 import com.example.mhmdreza_j.groupmemberpage.listener.DataSetChangeListener;
@@ -42,11 +42,11 @@ public class GroupMemberPageFragment
         implements LoadMoreGroupMemberListener, DataSetChangeListener {
 
     private int lastIndexRead = 0;
-    private GroupMemberRepository repository;
-    private Fragment fragment = this; //bad practice :))
-    private GroupMemberViewModel changedGroupMemberViewModel; //bad practice :))
+    private GroupMemberRepository repository = new GroupMemberRepository();
     private ArrayList<GroupMemberViewModel> groupMemberList = new ArrayList<>();
-    GroupMemberAdapter memberAdapter;
+    private GroupMemberAdapter memberAdapter;
+    private LiveData<List<GroupMemberViewModel>> members;
+
 
     public GroupMemberPageFragment() {
         // Required empty public constructor
@@ -123,7 +123,7 @@ public class GroupMemberPageFragment
 
             @Override
             public boolean onQueryTextChange(String s) {
-                repository.getSearchResult(s).observe(fragment, new Observer<List<GroupMemberViewModel>>() {
+                repository.getSearchResult(s).observe(getThisFragment(), new Observer<List<GroupMemberViewModel>>() {
                     @Override
                     public void onChanged(@Nullable List<GroupMemberViewModel> groupMemberViewModels) {
                         groupMemberList.clear();
@@ -174,35 +174,50 @@ public class GroupMemberPageFragment
 
     @Override
     public void getData() {
-        repository = new GroupMemberRepository();
-        LiveData<List<GroupMemberViewModel>> members = repository.getMembers(lastIndexRead, lastIndexRead + 50);
-        members.observe(this, new Observer<List<GroupMemberViewModel>>() {
+        new Thread(new Runnable() {
             @Override
-            public void onChanged(@Nullable List<GroupMemberViewModel> groupMemberViewModels) {
-                if (groupMemberViewModels != null && groupMemberViewModels.size() > 0) {
-                    if (repository.isLastQueryInsert()){
-                        groupMemberList.addAll(groupMemberViewModels);
+            public void run() {
+                members = repository.getMembers(lastIndexRead, lastIndexRead + 50);
+                members.observe(getThisFragment(), new Observer<List<GroupMemberViewModel>>() {
+                    @Override
+                    public void onChanged(@Nullable List<GroupMemberViewModel> groupMemberViewModels) {
+                        if (groupMemberViewModels != null && groupMemberViewModels.size() > 0) {
+                            if (repository.isLastQueryInsert()) {
+                                groupMemberList.addAll(groupMemberViewModels);
+                            }
+                            memberAdapter.notifyDataSetChanged();
+                        }
                     }
-                    memberAdapter.notifyDataSetChanged();
-                }
+                });
+                lastIndexRead += 50;
             }
-        });
+        }).start();
         Toast.makeText(MyApplication.getContext(), "load " + lastIndexRead + " to " + (lastIndexRead + 50), Toast.LENGTH_SHORT).show();
-        lastIndexRead += 50;
     }
 
 
     @Override
-    public void memberStatusChanged(GroupMemberViewModel groupMemberViewModel) {
-        changedGroupMemberViewModel = groupMemberViewModel;
-        repository.updateUserStatus(groupMemberViewModel);
-
+    public void memberStatusChanged(final GroupMemberViewModel groupMemberViewModel) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                repository.updateUserStatus(groupMemberViewModel);
+            }
+        }).start();
     }
 
     @Override
-    public void removeFromGroup(GroupMemberViewModel groupMemberViewModel) {
-        changedGroupMemberViewModel = groupMemberViewModel;
-        repository.removeFromGroup(groupMemberViewModel);
+    public void removeFromGroup(final GroupMemberViewModel groupMemberViewModel) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                repository.removeFromGroup(groupMemberViewModel);
+            }
+        }).start();
         groupMemberList.remove(groupMemberViewModel);
+    }
+
+    public Fragment getThisFragment() {
+        return this;
     }
 }

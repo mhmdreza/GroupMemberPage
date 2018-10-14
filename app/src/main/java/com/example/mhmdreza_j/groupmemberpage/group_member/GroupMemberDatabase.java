@@ -13,7 +13,6 @@ public abstract class GroupMemberDatabase extends RoomDatabase {
     public static GroupMemberDatabase getInstance(Context context) {
         if (INSTANCE == null) {
             INSTANCE = Room.databaseBuilder(context, GroupMemberDatabase.class, "groupMemberDB")
-                    .allowMainThreadQueries()
                     .build();
         }
         return INSTANCE;
