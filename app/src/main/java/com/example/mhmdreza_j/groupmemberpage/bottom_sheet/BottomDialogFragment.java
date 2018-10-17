@@ -16,6 +16,7 @@ import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.example.mhmdreza_j.groupmemberpage.MyApplication;
 import com.example.mhmdreza_j.groupmemberpage.R;
 import com.example.mhmdreza_j.groupmemberpage.group_member.GroupMemberViewModel;
 import com.example.mhmdreza_j.groupmemberpage.listener.BottomSheetCloseListener;
@@ -45,7 +46,6 @@ public class BottomDialogFragment extends BottomSheetDialogFragment {
             @Override
             public void onClick(View view) {
                 onRemoveFromGroupClicked();
-                bottomSheetCloseListener.closeBottomSheet();
             }
         });
 
@@ -65,14 +65,14 @@ public class BottomDialogFragment extends BottomSheetDialogFragment {
         final int checkedItem = (groupMemberViewModel.isAdmin()) ? 0 : 1;
         setChosenItem(checkedItem);
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("Select user access level")
+        builder.setTitle(R.string.changeUserAccess)
                 .setSingleChoiceItems(items, checkedItem, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         setChosenItem(i);
                     }
                 })
-                .setPositiveButton("CHANGE", new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.changeAccessLevel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         switch (getChosenItem()) {
@@ -90,7 +90,7 @@ public class BottomDialogFragment extends BottomSheetDialogFragment {
 
                     }
                 })
-                .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         Toast.makeText(getContext(), "onCancelClicked", Toast.LENGTH_SHORT).show();
@@ -102,7 +102,21 @@ public class BottomDialogFragment extends BottomSheetDialogFragment {
 
     private void onRemoveFromGroupClicked() {
         Toast.makeText(getContext(), "onRemoveFromGroupClicked", Toast.LENGTH_SHORT).show();
-        dataSetChangeListener.removeFromGroup(groupMemberViewModel);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
+                .setMessage(String.format(getString(R.string.removeMemberMessage), groupMemberViewModel.getName()))
+                .setPositiveButton("تایید", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dataSetChangeListener.removeFromGroup(groupMemberViewModel);
+                    }
+                })
+                .setNegativeButton("انصراف", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                    }
+                });
+        builder.create().show();
+        bottomSheetCloseListener.closeBottomSheet();
     }
 
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {

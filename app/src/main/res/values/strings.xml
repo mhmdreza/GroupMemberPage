@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="action_search">search group member</string>
     <string name="add_member">اضافه کردن عضو</string>
     <string name="create_link">ایجاد لینک عضویت</string>
@@ -6,4 +6,8 @@
     <string name="remove_from_group">Remove From Group</string>
     <string name="change_user_access">Change User Access</string>
     <string name="search_hint">search here…</string>
+    <string name="changeUserAccess">Select user access level</string>
+    <string name="changeAccessLevel">CHANGE</string>
+    <string name="cancel" tools:ignore="ButtonCase">CANCEL</string>
+    <string name="removeMemberMessage">%s از گروه حذف شود؟</string>
 </resources>

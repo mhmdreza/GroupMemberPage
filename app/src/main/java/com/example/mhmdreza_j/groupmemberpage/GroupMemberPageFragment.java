@@ -118,7 +118,7 @@ public class GroupMemberPageFragment
         SearchView searchView = (SearchView) searchMenuItem.getActionView();
         AutoCompleteTextView textView = searchView.findViewById(R.id.search_src_text);
         ImageView imageView = searchView.findViewById(R.id.search_close_btn);
-        imageView.setImageResource(R.drawable.ic_admin_star);
+        imageView.setImageResource(R.drawable.ic_close);
         imageView.bringToFront();
         textView.setTextColor(Color.WHITE);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
