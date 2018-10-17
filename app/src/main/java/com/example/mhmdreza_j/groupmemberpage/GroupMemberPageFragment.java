@@ -1,14 +1,18 @@
 package com.example.mhmdreza_j.groupmemberpage;
 
 
-import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -18,6 +22,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,7 +51,7 @@ public class GroupMemberPageFragment
     private ArrayList<GroupMemberViewModel> groupMemberList = new ArrayList<>();
     private GroupMemberAdapter memberAdapter;
     private LiveData<List<GroupMemberViewModel>> members;
-
+    private RecyclerView groupMemberRecyclerView;
 
     public GroupMemberPageFragment() {
         // Required empty public constructor
@@ -57,16 +62,12 @@ public class GroupMemberPageFragment
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_group_member_page, container, false);
+        setHasOptionsMenu(true);
         initializeGroupMember(view);
         setGroupInfo(view);
         return view;
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -115,6 +116,11 @@ public class GroupMemberPageFragment
         inflater.inflate(R.menu.group_member_menu, menu);
         MenuItem searchMenuItem = menu.findItem(R.id.action_search);
         SearchView searchView = (SearchView) searchMenuItem.getActionView();
+        AutoCompleteTextView textView = searchView.findViewById(R.id.search_src_text);
+        ImageView imageView = searchView.findViewById(R.id.search_close_btn);
+        imageView.setImageResource(R.drawable.ic_admin_star);
+        imageView.bringToFront();
+        textView.setTextColor(Color.WHITE);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
@@ -166,10 +172,14 @@ public class GroupMemberPageFragment
     }
 
     private void initializeGroupMember(View view) {
-        RecyclerView groupMemberRecyclerView = view.findViewById(R.id.recycler_view_group_member);
-        memberAdapter = new GroupMemberAdapter(groupMemberList, this, this);
+        groupMemberRecyclerView = view.findViewById(R.id.recycler_view_group_member);
+        groupMemberRecyclerView.setLayoutManager(new LinearLayoutManager(MyApplication.getContext()));
+        int i = groupMemberRecyclerView.computeVerticalScrollOffset();
+        groupMemberRecyclerView.setVerticalScrollbarPosition(i);
         getData();
+        memberAdapter = new GroupMemberAdapter(groupMemberList, this, this);
         groupMemberRecyclerView.setAdapter(memberAdapter);
+        setGroupMemberNumber(view);
     }
 
     @Override
@@ -219,5 +229,22 @@ public class GroupMemberPageFragment
 
     public Fragment getThisFragment() {
         return this;
+    }
+
+    public void setGroupMemberNumber(View view) {
+        final TextView groupMemberNumberTextView = view.findViewById(R.id.text_view_group_member_counter);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                repository.getLiveCount().observe(getThisFragment(), new Observer<Integer>() {
+                    @Override
+                    public void onChanged(@Nullable Integer integer) {
+                        if (integer != null) {
+                            groupMemberNumberTextView.setText(String.format(getString(R.string.group_member_number), integer));
+                        }
+                    }
+                });
+            }
+        }).start();
     }
 }

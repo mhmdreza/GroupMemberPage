@@ -10,7 +10,6 @@
     android:paddingEnd="17dp"
     android:paddingRight="17dp"
     android:background="@color/toolbar"
-    android:text="@string/group_member_number"
     android:textColor="@android:color/white"
     android:textSize="12sp"
     tools:ignore="RelativeOverlap,RtlSymmetry" />

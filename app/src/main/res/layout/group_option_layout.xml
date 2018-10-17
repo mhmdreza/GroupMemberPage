@@ -23,6 +23,7 @@
         android:paddingTop="17dp"
         android:text="@string/add_member"
         android:textAlignment="viewStart"
+        android:textColor="@color/option"
         android:textSize="13sp"
         tools:ignore="RelativeOverlap,RtlSymmetry" />
 
@@ -31,7 +32,7 @@
         android:layout_height="2dp"
         android:layout_marginLeft="32dp"
         android:layout_marginRight="32dp"
-        android:background="@color/horizontal_line"/>
+        android:background="@color/horizontal_line" />
 
     <TextView
         android:id="@+id/text_view_create_link"
@@ -51,6 +52,7 @@
         android:paddingTop="17dp"
         android:text="@string/create_link"
         android:textAlignment="viewStart"
+        android:textColor="@color/option"
         android:textSize="13sp"
         tools:ignore="RelativeOverlap,RtlSymmetry" />
 

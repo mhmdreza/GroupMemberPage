@@ -8,4 +8,7 @@
     <color name="text_blue">#FF3193FD</color>
     <color name="white">#ffffffff</color>
     <color name="horizontal_line">#FFDFDFDF</color>
+    <color name="online_user_text_color">#42bd41</color>
+    <color name="option">#FF333333</color>
+    <color name="regular">#FF454545</color>
 </resources>

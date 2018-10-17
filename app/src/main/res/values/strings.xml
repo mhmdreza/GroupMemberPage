@@ -2,7 +2,7 @@
     <string name="action_search">search group member</string>
     <string name="add_member">اضافه کردن عضو</string>
     <string name="create_link">ایجاد لینک عضویت</string>
-    <string name="group_member_number">اعضای گروه (تعداد)</string>
+    <string name="group_member_number">اعضای گروه (%d نفر)</string>
     <string name="remove_from_group">Remove From Group</string>
     <string name="change_user_access">Change User Access</string>
     <string name="search_hint">search here…</string>

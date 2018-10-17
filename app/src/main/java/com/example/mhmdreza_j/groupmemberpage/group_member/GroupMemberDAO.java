@@ -31,4 +31,7 @@ public interface GroupMemberDAO {
 
     @Update
     void updateUserStatus(GroupMemberViewModel groupMemberViewModel);
+
+    @Query("select count(*) from GroupMember")
+    LiveData<Integer> getLiveCount();
 }

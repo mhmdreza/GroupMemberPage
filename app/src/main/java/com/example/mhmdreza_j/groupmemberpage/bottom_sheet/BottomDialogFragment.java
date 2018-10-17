@@ -6,26 +6,35 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.example.mhmdreza_j.groupmemberpage.R;
 import com.example.mhmdreza_j.groupmemberpage.group_member.GroupMemberViewModel;
+import com.example.mhmdreza_j.groupmemberpage.listener.BottomSheetCloseListener;
 import com.example.mhmdreza_j.groupmemberpage.listener.DataSetChangeListener;
 
 @SuppressLint("ValidFragment")
-public class BottomDialogFragment extends BottomSheetDialogFragment{
+public class BottomDialogFragment extends BottomSheetDialogFragment {
 
     private GroupMemberViewModel groupMemberViewModel;
     private DataSetChangeListener dataSetChangeListener;
+    private BottomSheetCloseListener bottomSheetCloseListener;
     private int chosenItem = -1;
 
-    public BottomDialogFragment(GroupMemberViewModel groupMemberViewModel, DataSetChangeListener dataSetChangeListener) {
+    public BottomDialogFragment(GroupMemberViewModel groupMemberViewModel,
+                                DataSetChangeListener dataSetChangeListener,
+                                BottomSheetCloseListener bottomSheetCloseListener) {
         this.groupMemberViewModel = groupMemberViewModel;
         this.dataSetChangeListener = dataSetChangeListener;
+        this.bottomSheetCloseListener = bottomSheetCloseListener;
     }
 
     @Nullable
@@ -36,6 +45,7 @@ public class BottomDialogFragment extends BottomSheetDialogFragment{
             @Override
             public void onClick(View view) {
                 onRemoveFromGroupClicked();
+                bottomSheetCloseListener.closeBottomSheet();
             }
         });
 
@@ -43,6 +53,7 @@ public class BottomDialogFragment extends BottomSheetDialogFragment{
             @Override
             public void onClick(View view) {
                 onChangeUserAccessClicked();
+                bottomSheetCloseListener.closeBottomSheet();
             }
         });
         return view;
@@ -64,7 +75,7 @@ public class BottomDialogFragment extends BottomSheetDialogFragment{
                 .setPositiveButton("CHANGE", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        switch (getChosenItem()){
+                        switch (getChosenItem()) {
                             case 0:
                                 Toast.makeText(getContext(), "admin", Toast.LENGTH_SHORT).show();
                                 groupMemberViewModel.setAdmin(true);
@@ -73,9 +84,10 @@ public class BottomDialogFragment extends BottomSheetDialogFragment{
                                 Toast.makeText(getContext(), "user", Toast.LENGTH_SHORT).show();
                                 groupMemberViewModel.setAdmin(false);
                         }
-                        if (checkedItem != getChosenItem()){
+                        if (checkedItem != getChosenItem()) {
                             dataSetChangeListener.memberStatusChanged(groupMemberViewModel);
                         }
+
                     }
                 })
                 .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
@@ -91,6 +103,23 @@ public class BottomDialogFragment extends BottomSheetDialogFragment{
     private void onRemoveFromGroupClicked() {
         Toast.makeText(getContext(), "onRemoveFromGroupClicked", Toast.LENGTH_SHORT).show();
         dataSetChangeListener.removeFromGroup(groupMemberViewModel);
+    }
+
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                BottomSheetDialog dialog = (BottomSheetDialog) getDialog();
+                FrameLayout bottomSheet = dialog.findViewById(android.support.design.R.id.design_bottom_sheet);
+                BottomSheetBehavior behavior;
+                if (bottomSheet != null) {
+                    behavior = BottomSheetBehavior.from(bottomSheet);
+                    behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                    behavior.setPeekHeight(0);
+                }
+            }
+        });
     }
 
     public void setChosenItem(int chosenItem) {

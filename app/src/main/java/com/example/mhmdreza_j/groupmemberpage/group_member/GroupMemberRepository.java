@@ -1,5 +1,6 @@
 package com.example.mhmdreza_j.groupmemberpage.group_member;
 
+import android.app.Activity;
 import android.arch.lifecycle.LiveData;
 
 import com.example.mhmdreza_j.groupmemberpage.MyApplication;
@@ -60,5 +61,9 @@ public class GroupMemberRepository {
 
     public boolean isLastQueryInsert() {
         return isLastQueryInsert;
+    }
+
+    public LiveData<Integer> getLiveCount(){
+        return groupMemberDAO.getLiveCount();
     }
 }
