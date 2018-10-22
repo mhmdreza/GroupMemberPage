@@ -6,14 +6,12 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/text_view_add_member"
+        android:id="@+id/optionTitleTextView"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:background="?attr/selectableItemBackground"
         android:clickable="true"
-        android:drawableLeft="@drawable/ic_add_member"
         android:drawablePadding="32dp"
-        android:drawableStart="@drawable/ic_add_member"
         android:focusable="true"
         android:gravity="start"
         android:maxHeight="56dp"
@@ -21,39 +19,17 @@
         android:paddingLeft="16dp"
         android:paddingStart="16dp"
         android:paddingTop="17dp"
-        android:text="@string/add_member"
         android:textAlignment="viewStart"
         android:textColor="@color/option"
         android:textSize="13sp"
         tools:ignore="RelativeOverlap,RtlSymmetry" />
 
     <View
+        android:id="@+id/horizontal_line"
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:layout_marginLeft="32dp"
         android:layout_marginRight="32dp"
         android:background="@color/horizontal_line" />
-
-    <TextView
-        android:id="@+id/text_view_create_link"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:background="?attr/selectableItemBackground"
-        android:clickable="true"
-        android:drawableLeft="@drawable/ic_create_link"
-        android:drawablePadding="32dp"
-        android:drawableStart="@drawable/ic_create_link"
-        android:focusable="true"
-        android:gravity="start"
-        android:maxHeight="56dp"
-        android:paddingBottom="17dp"
-        android:paddingLeft="16dp"
-        android:paddingStart="16dp"
-        android:paddingTop="17dp"
-        android:text="@string/create_link"
-        android:textAlignment="viewStart"
-        android:textColor="@color/option"
-        android:textSize="13sp"
-        tools:ignore="RelativeOverlap,RtlSymmetry" />
 
 </LinearLayout>

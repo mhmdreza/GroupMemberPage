@@ -15,22 +15,22 @@ import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
 public interface GroupMemberDAO {
 
     @Query("select * from groupMember where ID <= :maxID and :minID < ID")
-    LiveData<List<GroupMemberViewModel>> getMembers(int minID, int maxID);
+    LiveData<List<MemberViewModel>> getMembers(int minID, int maxID);
 
     @Insert(onConflict = REPLACE)
-    void insertAll(List<GroupMemberViewModel> groupMembers);
+    void insertAll(List<MemberViewModel> groupMembers);
 
     @Query("select count(*) from GroupMember")
     int getCount();
 
     @Query("select * from groupmember where name like '%'||:searchWord||'%'")
-    LiveData<List<GroupMemberViewModel>> getSearchResult(String searchWord);
+    LiveData<List<MemberViewModel>> getSearchResult(String searchWord);
 
     @Delete
-    void deleteMember(GroupMemberViewModel model);
+    void deleteMember(MemberViewModel model);
 
     @Update
-    void updateUserStatus(GroupMemberViewModel groupMemberViewModel);
+    void updateUserStatus(MemberViewModel memberViewModel);
 
     @Query("select count(*) from GroupMember")
     LiveData<Integer> getLiveCount();

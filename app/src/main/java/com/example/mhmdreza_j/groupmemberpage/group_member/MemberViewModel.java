@@ -6,7 +6,7 @@ import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
 @Entity(tableName = "GroupMember")
-public class GroupMemberViewModel{
+public class MemberViewModel{
 
     @PrimaryKey(autoGenerate = true)
     private int ID;
@@ -23,11 +23,11 @@ public class GroupMemberViewModel{
     @ColumnInfo(name = "isAdmin")
     private boolean isAdmin;
 
-    public GroupMemberViewModel() {
+    public MemberViewModel() {
     }
 
     @Ignore
-    public GroupMemberViewModel(String name, String lastSeen, String profilePictureLink, boolean isAdmin) {
+    public MemberViewModel(String name, String lastSeen, String profilePictureLink, boolean isAdmin) {
         this.name = name;
         this.lastSeen = lastSeen;
         this.profilePictureLink = profilePictureLink;

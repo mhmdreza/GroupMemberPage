@@ -5,7 +5,7 @@ import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
-@Database(entities = {GroupMemberViewModel.class}, version = 1, exportSchema = false)
+@Database(entities = {MemberViewModel.class}, version = 1, exportSchema = false)
 public abstract class GroupMemberDatabase extends RoomDatabase {
     private static GroupMemberDatabase INSTANCE;
     public abstract GroupMemberDAO groupMemberDAO();

@@ -15,7 +15,7 @@ public class MembersPageActivity extends AppCompatActivity {
     }
 
     private void startFragment() {
-        GroupMemberPageFragment fragment = new GroupMemberPageFragment();
+        MemberPageFragment fragment = new MemberPageFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragment_layout, fragment);

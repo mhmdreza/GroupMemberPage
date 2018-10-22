@@ -16,7 +16,7 @@ import com.example.mhmdreza_j.groupmemberpage.listener.BottomSheetCloseListener;
 import com.example.mhmdreza_j.groupmemberpage.listener.DataSetChangeListener;
 import com.example.mhmdreza_j.groupmemberpage.listener.LoadMoreGroupMemberListener;
 
-public class GroupMemberViewHolder extends RecyclerView.ViewHolder implements BottomSheetCloseListener{
+public class MemberViewHolder extends RecyclerView.ViewHolder implements BottomSheetCloseListener{
     private ImageView groupMemberImageView;
     private ImageView adminImageView;
     private TextView nameTextView;
@@ -26,7 +26,7 @@ public class GroupMemberViewHolder extends RecyclerView.ViewHolder implements Bo
     private LoadMoreGroupMemberListener loadMoreListener;
     private DataSetChangeListener dataSetChangeListener;
 
-    public GroupMemberViewHolder(@NonNull final View itemView, LoadMoreGroupMemberListener loadMoreListener, DataSetChangeListener dataSetChangeListener) {
+    public MemberViewHolder(@NonNull final View itemView, LoadMoreGroupMemberListener loadMoreListener, DataSetChangeListener dataSetChangeListener) {
         super(itemView);
         this.dataSetChangeListener = dataSetChangeListener;
         this.loadMoreListener = loadMoreListener;
@@ -37,7 +37,7 @@ public class GroupMemberViewHolder extends RecyclerView.ViewHolder implements Bo
         groupMemberImageView.setBackgroundResource(R.drawable.group_member_profile_background);
     }
 
-    public void onBindViewModel(final GroupMemberViewModel model) {
+    public void onBindViewModel(final MemberViewModel model) {
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -55,7 +55,7 @@ public class GroupMemberViewHolder extends RecyclerView.ViewHolder implements Bo
         if (getAdapterPosition() == indexOfLoadData) {
             loadMoreListener.getData();
             Toast.makeText(itemView.getContext(), String.valueOf(getAdapterPosition()), Toast.LENGTH_SHORT).show();
-            GroupMemberViewHolder.indexOfLoadData += 50;
+            MemberViewHolder.indexOfLoadData += 50;
         }
         if (model.isAdmin()) {
             adminImageView.setVisibility(View.VISIBLE);

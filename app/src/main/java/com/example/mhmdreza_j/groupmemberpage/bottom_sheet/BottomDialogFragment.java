@@ -16,24 +16,23 @@ import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
-import com.example.mhmdreza_j.groupmemberpage.MyApplication;
 import com.example.mhmdreza_j.groupmemberpage.R;
-import com.example.mhmdreza_j.groupmemberpage.group_member.GroupMemberViewModel;
+import com.example.mhmdreza_j.groupmemberpage.group_member.MemberViewModel;
 import com.example.mhmdreza_j.groupmemberpage.listener.BottomSheetCloseListener;
 import com.example.mhmdreza_j.groupmemberpage.listener.DataSetChangeListener;
 
 @SuppressLint("ValidFragment")
 public class BottomDialogFragment extends BottomSheetDialogFragment {
 
-    private GroupMemberViewModel groupMemberViewModel;
+    private MemberViewModel memberViewModel;
     private DataSetChangeListener dataSetChangeListener;
     private BottomSheetCloseListener bottomSheetCloseListener;
     private int chosenItem = -1;
 
-    public BottomDialogFragment(GroupMemberViewModel groupMemberViewModel,
+    public BottomDialogFragment(MemberViewModel memberViewModel,
                                 DataSetChangeListener dataSetChangeListener,
                                 BottomSheetCloseListener bottomSheetCloseListener) {
-        this.groupMemberViewModel = groupMemberViewModel;
+        this.memberViewModel = memberViewModel;
         this.dataSetChangeListener = dataSetChangeListener;
         this.bottomSheetCloseListener = bottomSheetCloseListener;
     }
@@ -62,7 +61,7 @@ public class BottomDialogFragment extends BottomSheetDialogFragment {
     private void onChangeUserAccessClicked() {
         Toast.makeText(getContext(), "onChangeUserAccessClicked", Toast.LENGTH_SHORT).show();
         String[] items = {"admin", "group user"};
-        final int checkedItem = (groupMemberViewModel.isAdmin()) ? 0 : 1;
+        final int checkedItem = (memberViewModel.isAdmin()) ? 0 : 1;
         setChosenItem(checkedItem);
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle(R.string.changeUserAccess)
@@ -77,15 +76,13 @@ public class BottomDialogFragment extends BottomSheetDialogFragment {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         switch (getChosenItem()) {
                             case 0:
-                                Toast.makeText(getContext(), "admin", Toast.LENGTH_SHORT).show();
-                                groupMemberViewModel.setAdmin(true);
+                                memberViewModel.setAdmin(true);
                                 break;
                             case 1:
-                                Toast.makeText(getContext(), "user", Toast.LENGTH_SHORT).show();
-                                groupMemberViewModel.setAdmin(false);
+                                memberViewModel.setAdmin(false);
                         }
                         if (checkedItem != getChosenItem()) {
-                            dataSetChangeListener.memberStatusChanged(groupMemberViewModel);
+                            dataSetChangeListener.memberStatusChanged(memberViewModel);
                         }
 
                     }
@@ -93,7 +90,6 @@ public class BottomDialogFragment extends BottomSheetDialogFragment {
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        Toast.makeText(getContext(), "onCancelClicked", Toast.LENGTH_SHORT).show();
                     }
                 });
         builder.create().show();
@@ -103,11 +99,11 @@ public class BottomDialogFragment extends BottomSheetDialogFragment {
     private void onRemoveFromGroupClicked() {
         Toast.makeText(getContext(), "onRemoveFromGroupClicked", Toast.LENGTH_SHORT).show();
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
-                .setMessage(String.format(getString(R.string.removeMemberMessage), groupMemberViewModel.getName()))
+                .setMessage(String.format(getString(R.string.removeMemberMessage), memberViewModel.getName()))
                 .setPositiveButton("تایید", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        dataSetChangeListener.removeFromGroup(groupMemberViewModel);
+                        dataSetChangeListener.removeFromGroup(memberViewModel);
                     }
                 })
                 .setNegativeButton("انصراف", new DialogInterface.OnClickListener() {

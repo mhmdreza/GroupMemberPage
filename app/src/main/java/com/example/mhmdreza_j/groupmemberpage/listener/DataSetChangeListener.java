@@ -1,9 +1,9 @@
 package com.example.mhmdreza_j.groupmemberpage.listener;
 
-import com.example.mhmdreza_j.groupmemberpage.group_member.GroupMemberViewModel;
+import com.example.mhmdreza_j.groupmemberpage.group_member.MemberViewModel;
 
 public interface DataSetChangeListener {
-    void memberStatusChanged(GroupMemberViewModel groupMemberViewModel);
+    void memberStatusChanged(MemberViewModel memberViewModel);
 
-    void removeFromGroup(GroupMemberViewModel groupMemberViewModel);
+    void removeFromGroup(MemberViewModel memberViewModel);
 }

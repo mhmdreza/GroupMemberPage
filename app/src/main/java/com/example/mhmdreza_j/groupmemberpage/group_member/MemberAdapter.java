@@ -12,36 +12,36 @@ import com.example.mhmdreza_j.groupmemberpage.listener.LoadMoreGroupMemberListen
 
 import java.util.ArrayList;
 
-public class GroupMemberAdapter extends RecyclerView.Adapter<GroupMemberViewHolder>{
-    private ArrayList<GroupMemberViewModel> groupMemberViewModels;
+public class MemberAdapter extends RecyclerView.Adapter<MemberViewHolder>{
+    private ArrayList<MemberViewModel> memberViewModels;
     private LoadMoreGroupMemberListener loadMoreListener;
     private DataSetChangeListener dataSetChangeListener;
 
 
-    public GroupMemberAdapter(ArrayList<GroupMemberViewModel> groupMemberViewModels, LoadMoreGroupMemberListener loadMoreListener, DataSetChangeListener dataSetChangeListener) {
-        this.groupMemberViewModels = groupMemberViewModels;
+    public MemberAdapter(ArrayList<MemberViewModel> memberViewModels, LoadMoreGroupMemberListener loadMoreListener, DataSetChangeListener dataSetChangeListener) {
+        this.memberViewModels = memberViewModels;
         this.loadMoreListener = loadMoreListener;
         this.dataSetChangeListener = dataSetChangeListener;
     }
 
     @NonNull
     @Override
-    public GroupMemberViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public MemberViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.group_member_card, null);
-        return new GroupMemberViewHolder(view, loadMoreListener, dataSetChangeListener);
+        return new MemberViewHolder(view, loadMoreListener, dataSetChangeListener);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull GroupMemberViewHolder groupMemberViewHolder, int i) {
-        GroupMemberViewModel model = groupMemberViewModels.get(i);
-        groupMemberViewHolder.onBindViewModel(model);
+    public void onBindViewHolder(@NonNull MemberViewHolder memberViewHolder, int i) {
+        MemberViewModel model = memberViewModels.get(i);
+        memberViewHolder.onBindViewModel(model);
     }
 
     @Override
     public int getItemCount() {
-        if (groupMemberViewModels == null) {
+        if (memberViewModels == null) {
             return 0;
         }
-        return groupMemberViewModels.size();
+        return memberViewModels.size();
     }
 }

@@ -26,11 +26,15 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.example.mhmdreza_j.groupmemberpage.group_member.GroupMemberAdapter;
-import com.example.mhmdreza_j.groupmemberpage.group_member.GroupMemberRepository;
-import com.example.mhmdreza_j.groupmemberpage.group_member.GroupMemberViewModel;
+import com.example.mhmdreza_j.groupmemberpage.group_member.MemberRepository;
+import com.example.mhmdreza_j.groupmemberpage.group_member.MemberAdapter;
+import com.example.mhmdreza_j.groupmemberpage.group_member.MemberViewModel;
+import com.example.mhmdreza_j.groupmemberpage.library.GroupAdapter;
 import com.example.mhmdreza_j.groupmemberpage.listener.DataSetChangeListener;
 import com.example.mhmdreza_j.groupmemberpage.listener.LoadMoreGroupMemberListener;
+import com.example.mhmdreza_j.groupmemberpage.listener.OptionOnClickListener;
+import com.example.mhmdreza_j.groupmemberpage.options_recycler_view.OptionAdapter;
+import com.example.mhmdreza_j.groupmemberpage.options_recycler_view.view_model.OptionViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,18 +43,21 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class GroupMemberPageFragment
+public class MemberPageFragment
         extends Fragment
-        implements LoadMoreGroupMemberListener, DataSetChangeListener {
+        implements LoadMoreGroupMemberListener, DataSetChangeListener, OptionOnClickListener {
 
     private int lastIndexRead = 0;
-    private GroupMemberRepository repository = new GroupMemberRepository();
-    private ArrayList<GroupMemberViewModel> groupMemberList = new ArrayList<>();
-    private GroupMemberAdapter memberAdapter;
-    private LiveData<List<GroupMemberViewModel>> members;
-    private RecyclerView groupMemberRecyclerView;
+    private MemberRepository repository = new MemberRepository();
+    private ArrayList<MemberViewModel> memberList = new ArrayList<>();
+    private ArrayList<OptionViewModel> optionList = new ArrayList<>();
+    private MemberAdapter memberAdapter;
+    private OptionAdapter optionAdapter;
+    private LiveData<List<MemberViewModel>> members;
+    private RecyclerView membersRecyclerView;
+    private int memberCounterIndex;
 
-    public GroupMemberPageFragment() {
+    public MemberPageFragment() {
         // Required empty public constructor
     }
 
@@ -58,10 +65,11 @@ public class GroupMemberPageFragment
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_group_member_page, container, false);
+        View view = inflater.inflate(R.layout.fragment_member_page, container, false);
         setHasOptionsMenu(true);
         initializeGroupMember(view);
-        setGroupInfo(view);
+        initializeOptions(view);
+        setDialogInfo(view);
         return view;
     }
 
@@ -76,36 +84,48 @@ public class GroupMemberPageFragment
         super.onViewCreated(view, savedInstanceState);
     }
 
-    private void setGroupInfo(View view) {
-        TextView addMemberTextView = view.findViewById(R.id.text_view_add_member);
-        addMemberTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onAddMemberButtonClicked();
-            }
-        });
-        TextView createLinkTextView = view.findViewById(R.id.text_view_create_link);
-        createLinkTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onCreateLinkButtonClicked();
-            }
-        });
-        ImageView groupImageView = view.findViewById(R.id.image_view_group_image);
-        TextView groupNameTextView = view.findViewById(R.id.text_view_group_name);
-        TextView groupMemberNumberTextView = view.findViewById(R.id.text_view_group_member_number);
-        groupImageView.setOnClickListener(new View.OnClickListener() {
+    private void initializeOptions(View view) {
+//        RecyclerView optionRecyclerView = view.findViewById(R.id.optionRecyclerView);
+//        optionRecyclerView.setLayoutManager(new LinearLayoutManager(MyApplication.getContext()));
+//        optionRecyclerView.setAdapter(optionAdapter);
+    }
+
+    private void initializeGroupMember(View view) {
+        membersRecyclerView = view.findViewById(R.id.recycler_view_members);
+        membersRecyclerView.setLayoutManager(new LinearLayoutManager(MyApplication.getContext()));
+        int i = membersRecyclerView.computeVerticalScrollOffset();
+        membersRecyclerView.setVerticalScrollbarPosition(i);
+        getData();
+        memberAdapter = new MemberAdapter(memberList, this, this);
+        optionList.add(new OptionViewModel(OptionViewModel.OPTION_TYPE, getString(R.string.add_member), R.drawable.ic_add_member, false));
+        optionList.add(new OptionViewModel(OptionViewModel.OPTION_TYPE, getString(R.string.create_link), R.drawable.ic_create_link, true));
+        optionList.add(new OptionViewModel(OptionViewModel.VIEW_TYPE, getString(R.string.group_member_number), 0, false));
+        memberCounterIndex = optionList.size() - 1;
+        optionAdapter = new OptionAdapter(optionList, this);
+        GroupAdapter.Builder builder = new GroupAdapter.Builder();
+        builder.add(optionAdapter);
+        builder.add(memberAdapter);
+        GroupAdapter groupAdapter = builder.build();
+        membersRecyclerView.setAdapter(groupAdapter);
+        setGroupMemberNumber(view);
+    }
+
+    private void setDialogInfo(View view) {
+        ImageView dialogImageView = view.findViewById(R.id.image_view_dialog_image);
+        TextView dialogNameTextView = view.findViewById(R.id.text_view_dialog_name);
+        TextView dialogInfoTextView = view.findViewById(R.id.text_view_dialog_info);
+        dialogImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onGroupImageClicked();
             }
         });
-        groupNameTextView.setText("نام گروه");
-        groupMemberNumberTextView.setText("تعداد اعضای گروه");
+        dialogNameTextView.setText("نام گروه");
+        dialogInfoTextView.setText("تعداد اعضای گروه");
         Glide.with(view)
                 .load("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9S1cddQSI1jovslj7jvSg6EFjOsn0d8O6QHsMOxKr3iOHPrrV")
                 .apply(new RequestOptions().circleCrop())
-                .into(groupImageView);
+                .into(dialogImageView);
     }
 
     @Override
@@ -126,11 +146,11 @@ public class GroupMemberPageFragment
 
             @Override
             public boolean onQueryTextChange(String s) {
-                repository.getSearchResult(s).observe(getThisFragment(), new Observer<List<GroupMemberViewModel>>() {
+                repository.getSearchResult(s).observe(getThisFragment(), new Observer<List<MemberViewModel>>() {
                     @Override
-                    public void onChanged(@Nullable List<GroupMemberViewModel> groupMemberViewModels) {
-                        groupMemberList.clear();
-                        groupMemberList.addAll(groupMemberViewModels);
+                    public void onChanged(@Nullable List<MemberViewModel> memberViewModels) {
+                        memberList.clear();
+                        memberList.addAll(memberViewModels);
                         memberAdapter.notifyDataSetChanged();
                     }
                 });
@@ -160,24 +180,6 @@ public class GroupMemberPageFragment
         Toast.makeText(getContext(), "onGroupImageClicked", Toast.LENGTH_SHORT).show();
     }
 
-    private void onCreateLinkButtonClicked() {
-        Toast.makeText(this.getContext(), "onCreateLinkButtonClicked", Toast.LENGTH_SHORT).show();
-    }
-
-    private void onAddMemberButtonClicked() {
-        Toast.makeText(this.getContext(), "onAddMemberButtonClicked", Toast.LENGTH_SHORT).show();
-    }
-
-    private void initializeGroupMember(View view) {
-        groupMemberRecyclerView = view.findViewById(R.id.recycler_view_group_member);
-        groupMemberRecyclerView.setLayoutManager(new LinearLayoutManager(MyApplication.getContext()));
-        int i = groupMemberRecyclerView.computeVerticalScrollOffset();
-        groupMemberRecyclerView.setVerticalScrollbarPosition(i);
-        getData();
-        memberAdapter = new GroupMemberAdapter(groupMemberList, this, this);
-        groupMemberRecyclerView.setAdapter(memberAdapter);
-        setGroupMemberNumber(view);
-    }
 
     @Override
     public void getData() {
@@ -185,12 +187,12 @@ public class GroupMemberPageFragment
             @Override
             public void run() {
                 members = repository.getMembers(lastIndexRead, lastIndexRead + 50);
-                members.observe(getThisFragment(), new Observer<List<GroupMemberViewModel>>() {
+                members.observe(getThisFragment(), new Observer<List<MemberViewModel>>() {
                     @Override
-                    public void onChanged(@Nullable List<GroupMemberViewModel> groupMemberViewModels) {
-                        if (groupMemberViewModels != null && groupMemberViewModels.size() > 0) {
+                    public void onChanged(@Nullable List<MemberViewModel> memberViewModels) {
+                        if (memberViewModels != null && memberViewModels.size() > 0) {
                             if (repository.isLastQueryInsert()) {
-                                groupMemberList.addAll(groupMemberViewModels);
+                                memberList.addAll(memberViewModels);
                             }
                             memberAdapter.notifyDataSetChanged();
                         }
@@ -204,32 +206,27 @@ public class GroupMemberPageFragment
 
 
     @Override
-    public void memberStatusChanged(final GroupMemberViewModel groupMemberViewModel) {
+    public void memberStatusChanged(final MemberViewModel memberViewModel) {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                repository.updateUserStatus(groupMemberViewModel);
+                repository.updateUserStatus(memberViewModel);
             }
         }).start();
     }
 
     @Override
-    public void removeFromGroup(final GroupMemberViewModel groupMemberViewModel) {
+    public void removeFromGroup(final MemberViewModel memberViewModel) {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                repository.removeFromGroup(groupMemberViewModel);
+                repository.removeFromGroup(memberViewModel);
             }
         }).start();
-        groupMemberList.remove(groupMemberViewModel);
-    }
-
-    public Fragment getThisFragment() {
-        return this;
+        memberList.remove(memberViewModel);
     }
 
     public void setGroupMemberNumber(View view) {
-        final TextView groupMemberNumberTextView = view.findViewById(R.id.text_view_group_member_counter);
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -237,11 +234,35 @@ public class GroupMemberPageFragment
                     @Override
                     public void onChanged(@Nullable Integer integer) {
                         if (integer != null) {
-                            groupMemberNumberTextView.setText(String.format(getString(R.string.group_member_number), integer));
+                            optionList.get(memberCounterIndex).setTitle(String.format(getString(R.string.group_member_number), integer));
+                            optionAdapter.notifyDataSetChanged();
                         }
                     }
                 });
             }
         }).start();
+    }
+
+    public Fragment getThisFragment() {
+        return this;
+    }
+
+    private void onCreateLinkButtonClicked(View view) {
+        Toast.makeText(view.getContext(), "onCreateLinkButtonClicked", Toast.LENGTH_SHORT).show();
+    }
+
+    private void onAddMemberButtonClicked(View view) {
+        Toast.makeText(view.getContext(), "onAddMemberButtonClicked", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onOptionClicked(int iconResID, View view) {
+        switch (iconResID){
+            case R.drawable.ic_add_member:
+                onAddMemberButtonClicked(view);
+                break;
+            case R.drawable.ic_create_link:
+                onCreateLinkButtonClicked(view);
+        }
     }
 }
